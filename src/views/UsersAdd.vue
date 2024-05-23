@@ -1,14 +1,17 @@
 <template>
   <div>
     <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-      <el-form-item label="分组名称" prop="name">
+      <el-form-item label="用户名" prop="name">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="描述" prop="description">
-        <el-input v-model="form.description"></el-input>
+      <el-form-item label="手机号" prop="phone">
+        <el-input v-model="form.phone"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('form')">创建分组</el-button>
+        <el-button type="primary" @click="submitForm('form')">创建</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -28,14 +31,19 @@
         form: {
           id: 0,
           name: '',
-          description: '',
+          phone: '',
+          password: '',
         },
         rules: {
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' },
             { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' },
           ],
-          description: [
+          phone: [
+            { required: false, message: '请输入', trigger: 'blur' },
+            { min: 2, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur' },
+          ],
+          password: [
             { required: false, message: '请输入描述', trigger: 'blur' },
             { min: 2, max: 100, message: '长度在 0 到 100 个字符', trigger: 'blur' },
           ],
@@ -48,15 +56,16 @@
           if (valid) {
             const forData = new FormData();
             forData.append('name', this.form.name)
-            forData.append('description', this.form.description)
+            forData.append('phone', this.form.phone)
+            forData.append('password', this.form.password)
             // 发送创建请求
             this.$axios
-            .post("/api/groups/add",forData)
+            .post("/api/users",forData)
             .then(res => {
               console.log("--------333---- axios res:: ", res)
               this.$message.success('创建成功')
               setTimeout(() => {
-                this.$router.push('/groups')
+                this.$router.push('/users')
               }, 500);
               
             })

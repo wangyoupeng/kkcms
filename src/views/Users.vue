@@ -9,13 +9,13 @@
       
     </div>
       
-    <el-table :data="groupsList" style="width: 100%">
+    <el-table :data="usersList" style="width: 100%">
       <el-table-column prop="name" label="名称"></el-table-column>
-      <el-table-column prop="description" label="描述"></el-table-column>
+      <el-table-column prop="phone" label="手机号码"></el-table-column>
 
       <el-table-column label="操作">
         <template slot-scope="{ row }">
-          <el-button type="text" size="small" @click="handleEdit(row)">编辑</el-button>
+          <!-- <el-button type="text" size="small" @click="handleEdit(row)">编辑</el-button> -->
           <el-button type="text" size="small" @click="handleDelete(row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       total: 0,
-      groupsList: [],
+      usersList: [],
       filterText: '',
       pageSize: 5,
       currentPage: 1,
@@ -51,7 +51,7 @@ export default {
     const params = { filterText: this.filterText, pageSize: this.pageSize, currentPage: this.currentPage }
     this.$axios.get('/api/users',{ params })
       .then(res => {
-        this.groupsList = res.data.list;
+        this.usersList = res.data.list;
         this.total = res.data.total;
       })
       .catch(error => {
@@ -59,10 +59,10 @@ export default {
       });
   },
   computed: { // 计算
-    pagegroupsList() {
+    pageusersList() {
       const start = (this.currentPage - 1) * this.pageSize
       const end = this.currentPage * this.pageSize
-      return this.filtergroupsList.slice(start, end)
+      return this.filterusersList.slice(start, end)
     }
   },
   methods: {
@@ -71,7 +71,7 @@ export default {
       this.$axios.get('/api/users',{ params })
       .then(res => {
         console.log('============ groupsItem list res: ', res.data.list)
-        this.groupsList = res.data.list;
+        this.usersList = res.data.list;
         this.total = res.data.total;
       })
       .catch(error => {
