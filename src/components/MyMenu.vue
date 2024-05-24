@@ -13,7 +13,7 @@
   <el-submenu index="3">
     <template slot="title"><i class="el-icon-menu"></i>护工管理</template>
     <el-menu-item-group>
-      <el-menu-item index="2-1" @click="jump_to_orders">护工列表</el-menu-item>
+      <el-menu-item index="2-1" @click="jump_to_caregivers">护工列表</el-menu-item>
     </el-menu-item-group>
   </el-submenu>
 
@@ -53,6 +53,12 @@ export default {
         path: '/categories'
       })
     },
+    jump_to_caregivers() {
+      this.$router.push({
+        path: '/caregivers'
+      })
+    },
+
     jump_to_users() {
       this.$router.push({
         path: '/users'

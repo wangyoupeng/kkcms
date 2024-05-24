@@ -24,45 +24,61 @@ const routes = [
     component: () => import('../views/login/Regist.vue')
   },
   
-  {
-    path: '/goods',
-    name: 'Goods',
-    component: () => import('../views/GoodsList.vue')
-  },
-  {
-    path: '/goods/add',
-    name: 'GoodsAdd',
-    component: () => import('../views/GoodsAdd.vue')
-  },
-  {
-    path: '/goods/edit',
-    name: 'GoodsEdit',
-    component: () => import('../views/GoodsEdit.vue')
-  },
+  // {
+  //   path: '/goods',
+  //   name: 'Goods',
+  //   component: () => import('../views/GoodsList.vue')
+  // },
+  // {
+  //   path: '/goods/add',
+  //   name: 'GoodsAdd',
+  //   component: () => import('../views/GoodsAdd.vue')
+  // },
+  // {
+  //   path: '/goods/edit',
+  //   name: 'GoodsEdit',
+  //   component: () => import('../views/GoodsEdit.vue')
+  // },
   {
     path: '/orders',
     name: 'Orders',
-    component: () => import('../views/OrdersList.vue')
+    component: () => import('../views/orders/OrdersList.vue')
   },
-  {
-    path: '/categories',
-    name: 'Categories',
-    component: () => import('../views/Categories.vue')
-  },
-  {
-    path: '/categories/add',
-    name: 'CategoriesAdd',
-    component: () => import('../views/CategoriesAdd.vue')
-  },
+  // {
+  //   path: '/categories',
+  //   name: 'Categories',
+  //   component: () => import('../views/Categories.vue')
+  // },
+  // {
+  //   path: '/categories/add',
+  //   name: 'CategoriesAdd',
+  //   component: () => import('../views/CategoriesAdd.vue')
+  // },
   {
     path: '/Users',
     name: 'Users',
-    component: () => import('../views/Users.vue')
+    component: () => import('../views/users/Users.vue')
   },
   {
     path: '/users/add',
     name: 'UsersAdd',
-    component: () => import('../views/UsersAdd.vue')
+    component: () => import('../views/users/UsersAdd.vue')
+  },
+
+  {
+    path: '/caregivers',
+    name: 'Caregivers',
+    component: () => import('../views/caregivers/Caregivers.vue')
+  },
+  {
+    path: '/caregivers/add',
+    name: 'CaregiversAdd',
+    component: () => import('../views/caregivers/CaregiversAdd.vue')
+  },
+  {
+    path: '/caregivers/edit',
+    name: 'CaregiversEdit',
+    component: () => import('../views/caregivers/CaregiversEdit.vue')
   },
 ]
 
