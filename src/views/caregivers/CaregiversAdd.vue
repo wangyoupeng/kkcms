@@ -4,17 +4,23 @@
       <el-form-item label="图片" prop="imageUrl">
         <MyUploadImages @upload-image-success="handleUploadImageSuccess"></MyUploadImages>
       </el-form-item>
-      <el-form-item label="商品名称" prop="name">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item label="护工名称" prop="caregiverName">
+        <el-input v-model="form.caregiverName"></el-input>
       </el-form-item>
-      <el-form-item label="商品描述" prop="description">
-        <el-input v-model="form.description"></el-input>
+      <el-form-item label="护工年龄" prop="caregiverAge">
+        <el-input type="number" v-model="form.caregiverAge"></el-input>
       </el-form-item>
-      <el-form-item label="商品价格/元" prop="price">
-        <el-input type="number" v-model="form.price" :value="form.price | decimalFilter"></el-input>
+      <el-form-item label="护工手机号码" prop="phone">
+        <el-input  v-model="form.phone"></el-input>
       </el-form-item>
-      <el-form-item label="商品库存" prop="stock">
-        <el-input type="number" v-model="form.stock"></el-input>
+      <el-form-item label="选择开始护理日期" prop="careAt">
+        <el-date-picker type="date" v-model="form.careAt" placeholder="请选择日期"></el-date-picker>
+      </el-form-item>
+      <el-form-item label="服务城市" prop="serviceCity">
+        <el-input v-model="form.serviceCity"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" prop="d">
+        <el-input v-model="form.d"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('form')">创建</el-button>
@@ -38,32 +44,9 @@
     data() {
       return {
         form: {
-          id: 0,
-          imageUrl: 'images/1688957642054_gaifan.png',
-          name: '',
-          description: '',
-          price: 0,
         },
         rules: {
-          imageUrl: [
-            {  message: '请上传图片', trigger: 'blur' },
-          ],
-          name: [
-            { required: true, message: '请输入商品名称', trigger: 'blur' },
-            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
-          ],
-          description: [
-            { required: true, message: '请输入商品描述', trigger: 'blur' },
-            { min: 2, max: 100, message: '长度在 5 到 100 个字符', trigger: 'blur' },
-          ],
-          price: [
-            { required: true, message: '请输入商品价格', trigger: 'blur' },
-            // { type: 'number', message: '必须为数字值' }
-          ],
-          stock: [
-            { required: true, message: '请输入商品价格', trigger: 'blur' },
-            // { type: 'number', message: '必须为数字值' }
-          ],
+          
         }
       }
     },
@@ -77,18 +60,21 @@
           if (valid) {
             const forData = new FormData();
             forData.append('imageUrls', this.form.imageUrls)
-            forData.append('name', this.form.name)
-            forData.append('description', this.form.description)
-            forData.append('price', this.form.price)
-            forData.append('stock', this.form.stock)
+            forData.append('caregiverName', this.form.caregiverName)
+            forData.append('phone', this.form.phone)
+            forData.append('caregiverAge', this.form.caregiverAge)
+            forData.append('careAt', this.form.careAt)
+            forData.append('serviceCity', this.form.serviceCity)
+            forData.append('d', this.form.d)
             // 发送创建商品请求
             this.$axios
-            .post("/api/goods/add",forData)
+            .post("/api/caregivers",forData)
             .then(res => {
               console.log("--------333---- axios res:: ", res)
-              this.$message.success('创建商品成功')
+              this.$message.success('创建成功')
               setTimeout(() => {
-                this.$router.push('/goods')
+                this.$router.push('/caregivers')
+                this.forData = {};
               }, 500);
               
             })

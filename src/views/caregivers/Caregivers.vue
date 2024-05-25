@@ -13,17 +13,17 @@
     <el-table :data="caregiversList" style="width: 100%">
       <el-table-column :label="label">
         <template slot-scope="{ row }">
-          <img :src="row.ImageList" class="caregivers-img">
+          <img :src="row.imageUrl" class="caregivers-img">
         </template>
       </el-table-column>
       <el-table-column prop="caregiverName" label="护工名"></el-table-column>
       <el-table-column prop="caregiverAge" label="年龄"></el-table-column>
-
       <el-table-column prop="phone" label="手机号码"></el-table-column>
       <el-table-column prop="careAt" label="开始护理时间"></el-table-column>
-      <el-table-column prop="ServiceCitys" label="服务城市"></el-table-column>
+      <el-table-column prop="serviceCity" label="服务城市"></el-table-column>
+      <el-table-column prop="d" label="备注"></el-table-column>
+
       <el-table-column label="操作">
-        
         <template slot-scope="{ row }">
           <el-button type="text" size="small" @click="handleEdit(row)">编辑</el-button>
           <el-button type="text" size="small" @click="handleDelete(row.id)">删除</el-button>

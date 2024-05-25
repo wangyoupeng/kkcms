@@ -30,7 +30,7 @@ export default {
       console.log("--11--,", res)
       console.log("--22--,", file)
       console.log("--33--,", fileList)
-      let fullImageUrls = fileList.map(f => `http://localhost:3000${f.url}`) 
+      let fullImageUrls = fileList.map(f => `http://localhost:3000${f.response.data.url}`) 
       this.imageUrls = fullImageUrls
       this.$emit('upload-image-success', {
         imageUrls: fullImageUrls, 
