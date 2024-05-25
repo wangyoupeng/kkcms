@@ -13,7 +13,15 @@
     <el-table :data="caregiversList" style="width: 100%">
       <el-table-column :label="label">
         <template slot-scope="{ row }">
-          <img :src="row.imageUrl" class="caregivers-img">
+          <!-- v-for="(file, index) in imageUrls"
+          <img :src="row.imageUrl" class="caregivers-img"> -->
+          <el-image
+            v-for="(url, index) in row.imageUrls"
+            :key="index"
+            :src="url"
+            style="width: 100px; height: 100px; margin-right: 10px;"
+            fit="cover"
+          ></el-image>
         </template>
       </el-table-column>
       <el-table-column prop="caregiverName" label="护工名"></el-table-column>

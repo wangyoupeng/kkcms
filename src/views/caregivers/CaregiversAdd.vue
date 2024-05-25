@@ -2,6 +2,22 @@
   <div>
     <el-form :model="form" :rules="rules" ref="form" label-width="100px">
       <el-form-item label="图片" prop="imageUrl">
+        <el-div v-for="(file, index) in form.imageUrls" :key="index" style="position: relative; margin-right:20px; width: 100px; height: 100px; ">
+          <el-image
+          style="width: 100px; height: 100px; "
+          :src="file"
+          fit="cover"
+          :preview-src-list="[file]"
+        >
+        </el-image>
+        <el-button
+            slot="header"
+            icon="el-icon-close"
+            @click="deleteImage(index)"
+            circle
+            style=" position: absolute; top: 0;right: 0; margin-top: -90px; opacity: 0.9; text-align: center;"
+          ></el-button>
+        </el-div>
         <MyUploadImages @upload-image-success="handleUploadImageSuccess"></MyUploadImages>
       </el-form-item>
       <el-form-item label="护工名称" prop="caregiverName">
@@ -44,6 +60,7 @@
     data() {
       return {
         form: {
+          imageUrls:[],
         },
         rules: {
           
@@ -52,8 +69,10 @@
     },
     methods: {
       handleUploadImageSuccess(imagesInfo){
-        console.log("-----444---imagesInfo:", imagesInfo)
         this.form.imageUrls = imagesInfo.imageUrls || ""
+      },
+      deleteImage(index) {
+        this.form.imageUrls.splice(index, 1)
       },
       submitForm(formName) {
         this.$refs[formName].validate(valid => {
