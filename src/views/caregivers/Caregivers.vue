@@ -1,5 +1,6 @@
 <template>
   <div class="caregivers-manage">
+    
     <div class="search-bar">
       <el-input placeholder="护工名称" v-model="caregiverNameText"></el-input>
       <el-input placeholder="手机号" v-model="phoneText"></el-input>
@@ -34,7 +35,7 @@
       <el-table-column label="操作">
         <template slot-scope="{ row }">
           <el-button type="text" size="small" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="text" size="small" @click="handleDelete(row.id)">删除</el-button>
+          <el-button type="danger" size="small" @click="handleDelete(row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -148,26 +149,26 @@ export default {
 
 <style scoped>
   .caregivers-manage {
-  /* padding: 20px; */
-}
+    /* padding: 20px; */
+  }
 
-.search-bar {
-  margin-bottom: 20px;
-}
-.search-bar .el-input{
-  width: 200px;
-  margin-right: 5px;
-}
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  .search-bar .el-input{
+    width: 200px;
+    margin-right: 5px;
+  }
 
-.create-bar {
-  float: right;
-  margin-right: 10px;
-}
+  .create-bar {
+    float: right;
+    margin-right: 10px;
+  }
 
-.caregivers-img {
-  width: 100%;
-  height: 80px;
-  object-fit: contain;
-}
+  .caregivers-img {
+    width: 100%;
+    height: 80px;
+    object-fit: contain;
+  }
 </style>
 

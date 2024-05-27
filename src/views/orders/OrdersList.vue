@@ -1,28 +1,54 @@
 <template>
   <div style="padding-bottom: 50px;">
-    <el-table :data="orderList" style="width: 100%">
-      <el-table-column prop="id" label="订单编号" style="width: 100%"></el-table-column>
-      <el-table-column prop="created_at" label="下单时间"></el-table-column>
-      <el-table-column label="订单列表">
+    <div class="users-manage">
+      <div class="search-bar">
+        <el-input placeholder="工单编号" v-model="sheetId"></el-input>
+        <el-input placeholder="城市" v-model="ServiceCity"></el-input>
+        <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <!-- <div class="create-bar">
+          <el-button type="primary" @click="handleCaregiversAdd">新建</el-button>
+        </div> -->
+        
+      </div>
+      <el-table :data="orderList" style="width: 100%">
+      <el-table-column prop="sheetId" label="订单编号" style="width: 100%"></el-table-column>
+      <el-table-column prop="serviceTime" label="服务时间"></el-table-column>
+      <el-table-column prop="serviceCity" label="城市"></el-table-column>
+      <el-table-column prop="hospitalName" label="医院"></el-table-column>
+      <el-table-column prop="deptName" label="科室"></el-table-column>
+      <el-table-column prop="memberName" label="会员名称"></el-table-column>
+      <el-table-column prop="memberAge" label="会员年龄"></el-table-column>
+      <el-table-column prop="memberSex" label="性别" >
         <template slot-scope="{ row }">
-          <el-tag v-for="product in row.orderItems" :key="product.id" type="info">
-            {{ product.goods_name }} x {{ product.amount }}
-          </el-tag>
+          {{ formatSexRender(row.memberSex) }}
         </template>
       </el-table-column>
-      <el-table-column prop="price" label="订单总价">
+      <el-table-column prop="memberContactMobile" label="会员联系方式"></el-table-column>
+      <el-table-column prop="diseaseSituation" label="症状情况"></el-table-column>
+      <el-table-column prop="isexternalCaregiver" label="是否允许院外护⼯">
         <template slot-scope="{ row }">
-          {{ formatPrice(row.price) }}
+          {{ formatYN(row.isexternalCaregiver) }}
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="订单状态">
+      <el-table-column prop="specialDemand" label="特殊需求"></el-table-column>
+      <el-table-column prop="isUrgent" label="是否加急">
         <template slot-scope="{ row }">
-          {{ row.status || '已支付' }}
+          {{ formatYN(row.isUrgent) }}
         </template>
       </el-table-column>
+      <el-table-column prop="status" label="工单状态">
+        <template slot-scope="{ row }">
+          {{ row.status || '' }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="at" label="同步时间"></el-table-column>
+
+
       <el-table-column label="操作">
         <template  slot-scope="{ row }">
-          <el-button type="warning" size="small" @click="removeItem( row )">修改</el-button>
+          <el-button type="text" size="small" @click="removeItem( row )">修改</el-button>
+          <el-button type="warning" size="small" @click="removeItem( row )">上户</el-button>
+          <el-button type="warning" size="small" @click="removeItem( row )">下户</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -33,25 +59,52 @@
       layout="total, sizes, prev, pager, next, jumper"
       :page-sizes="[10, 20, 50]"
     />
+
+    </div>
+    
   </div>
 </template>
 
 <style>
-/* 订单列表 */
-.el-table__header tr th {
-  background-color: #f5f5f5;
-}
-.el-tag {
-  margin-right: 5px;
-}
+  /* 订单列表 */
+  .el-table__header tr th {
+    background-color: #f5f5f5;
+  }
+  .el-tag {
+    margin-right: 5px;
+  }
 
-/* 分页控件 */
-.el-pagination {
-  text-align: right;
-}
-.el-pagination__total {
-  margin-right: 20px;
-}
+  /* 分页控件 */
+  .el-pagination {
+    text-align: right;
+  }
+  .el-pagination__total {
+    margin-right: 20px;
+  }
+
+  .users-manage {
+    /* padding: 20px; */
+  }
+
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  .search-bar .el-input{
+    width: 200px;
+    margin-right: 5px;
+  }
+
+  .create-bar {
+    float: right;
+    margin-right: 10px;
+  }
+
+  .users-img {
+    width: 100%;
+    height: 80px;
+    object-fit: contain;
+  }
+
 </style>
 
 <script>
@@ -90,7 +143,7 @@ export default {
   methods: {
     reloadPage(){
       const params = { user_id: 10000 }
-        this.$axios.get('/api/orders/list',params )
+        this.$axios.get('/api/orders',params )
           .then(res => {
             this.orderList = res.data.list;
             // alert(res.data.list.length)
@@ -101,6 +154,17 @@ export default {
     },
     formatPrice(price) { // 分转元
       return (price / 100).toFixed(2)
+    },
+    formatSexRender(memberSex) {
+      const sexMap = {
+        "N1241": '男',
+        "N1242": '女'
+      };
+      return sexMap[memberSex] || memberSex; 
+    },
+    formatYN(num) {
+      const listss = ["否","是"]
+      return listss[num] || num; 
     },
   },
   
