@@ -113,7 +113,7 @@ export default {
     },
     handleDelete(caregivers_id) {
       // 商品删除逻辑
-      this.$axios.delete('/api/caregivers/delete',{ caregivers_id })
+      this.$axios.post('/api/caregivers/del',{ caregivers_id })
       .then((res) => {
         // this.$router.push('/caregivers')
         if(res.data.message == 'ok'){

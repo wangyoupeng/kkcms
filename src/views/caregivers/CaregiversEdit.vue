@@ -68,25 +68,7 @@
         },
         editItem: {},
         rules: {
-          imageUrl: [
-            {  message: '请上传图片', trigger: 'blur' },
-          ],
-          name: [
-            { required: true, message: '请输入护工名称', trigger: 'blur' },
-            { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' },
-          ],
-          description: [
-            { required: true, message: '请输入护工描述', trigger: 'blur' },
-            { min: 2, max: 100, message: '长度在 5 到 100 个字符', trigger: 'blur' },
-          ],
-          price: [
-            { required: true, message: '请输入护工价格', trigger: 'blur' },
-            // { type: 'number', message: '必须为数字值' }
-          ],
-          stock: [
-            { required: true, message: '请输入护工价格', trigger: 'blur' },
-            // { type: 'number', message: '必须为数字值' }
-          ],
+
         }
       }
     },
@@ -113,22 +95,21 @@
           if (valid) {
             const forData = {};
             forData.id = this.form.id
-            if(this.form.imageUrls != this.editItem.imageUrls) forData.imageUrls = this.form.imageUrls
-            if(this.form.caregiverName != this.editItem.caregiverName) forData.caregiverName = this.form.caregiverName
-            if(this.form.phone != this.editItem.phone) forData.phone = this.form.phone
-            if(this.form.caregiverAge != this.editItem.caregiverAge) forData.caregiverAge = this.form.caregiverAge
-            if(this.form.careAt != this.editItem.careAt) forData.careAt = this.form.careAt
-            if(this.form.serviceCity != this.editItem.serviceCity) forData.serviceCity = this.form.serviceCity
-            if(this.form.d != this.editItem.d) forData.d = this.form.d
+            forData.imageUrls = this.form.imageUrls
+            forData.caregiverName = this.form.caregiverName
+            forData.phone = this.form.phone
+            forData.caregiverAge = this.form.caregiverAge
+            forData.careAt = this.form.careAt
+            forData.serviceCity = this.form.serviceCity
+            forData.d = this.form.d
+
+            console.log("this.form::", this.form)
+            console.log("this.editItem::", this.editItem)
 
 
-            if(Object.keys(forData).length < 2) {
-              this.$message.success('无修改..')
-              return
-            }
             // 发送创建护工请求
             this.$axios
-            .put("/api/caregivers/edit",forData)
+            .post("/api/caregivers/update",forData)
             .then(res => {
               console.log("--------333---- axios res:: ", res)
               this.$message.success('修改成功')
