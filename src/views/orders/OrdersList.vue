@@ -5,11 +5,8 @@
         <el-input placeholder="工单编号" v-model="sheetId"></el-input>
         <el-input placeholder="城市" v-model="ServiceCity"></el-input>
         <el-button type="primary" @click="handleSearch">搜索</el-button>
-        <!-- <div class="create-bar">
-          <el-button type="primary" @click="handleCaregiversAdd">新建</el-button>
-        </div> -->
-        
       </div>
+
       <el-table :data="orderList" style="width: 100%">
       <el-table-column prop="sheetId" label="订单编号" style="width: 100%"></el-table-column>
       <el-table-column prop="serviceTime" label="服务时间"></el-table-column>
@@ -46,9 +43,9 @@
 
       <el-table-column label="操作">
         <template  slot-scope="{ row }">
-          <el-button type="text" size="small" @click="removeItem( row )">修改</el-button>
-          <el-button type="warning" size="small" @click="removeItem( row )">上户</el-button>
-          <el-button type="warning" size="small" @click="removeItem( row )">下户</el-button>
+          <!-- <el-button type="text" size="small" @click="removeItem( row )">修改</el-button> -->
+          <el-button type="warning" size="small" @click="jump_to_up( row.sheetId )">上户</el-button>
+          <el-button type="warning" size="small" @click="jump_to_down( row.sheetId )">下户</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -165,6 +162,24 @@ export default {
     formatYN(num) {
       const listss = ["否","是"]
       return listss[num] || num; 
+    },
+    jump_to_up(sheetId) {
+      this.$router.push({
+        name: 'OrdersUp',
+        params: {
+          sheetId
+        }
+      })
+      // 商品编辑逻辑
+    },
+    jump_to_down(id) {
+      this.$router.push({
+        name: 'OrdersDown',
+        params: {
+          id
+        }
+      })
+      // 商品编辑逻辑
     },
   },
   

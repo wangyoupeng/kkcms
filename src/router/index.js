@@ -44,16 +44,16 @@ const routes = [
     name: 'Orders',
     component: () => import('../views/orders/OrdersList.vue')
   },
-  // {
-  //   path: '/categories',
-  //   name: 'Categories',
-  //   component: () => import('../views/Categories.vue')
-  // },
-  // {
-  //   path: '/categories/add',
-  //   name: 'CategoriesAdd',
-  //   component: () => import('../views/CategoriesAdd.vue')
-  // },
+  {
+    path: '/orders/up',
+    name: 'OrdersUp',
+    component: () => import('../views/actions/ActionsAddUp.vue')
+  },
+  {
+    path: '/orders/down',
+    name: 'OrdersDown',
+    component: () => import('../views/actions/ActionsAddDown.vue')
+  },
   {
     path: '/Users',
     name: 'Users',
