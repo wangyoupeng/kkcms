@@ -1,7 +1,26 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-      <el-form-item label="上户图片" prop="imageUrl">
+    <el-form :model="form" ref="form" label-width="100px">
+      <el-form-item label="护工" prop="selectData">
+        <el-select
+          v-model="form.selectData.value"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入关键词"
+          :remote-method="searchCaregivers"
+          :loading="loading">
+          <el-option
+            v-for="item in form.selectData.options"
+            :key="item.id"
+            :label="item.caregiverName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      
+
+      <el-form-item label="上户图片" prop="imageUrls">
         <el-div v-for="(file, index) in form.imageUrls" :key="index" style="position: relative; margin-right:20px; width: 100px; height: 100px; ">
           <el-image
           style="width: 100px; height: 100px; "
@@ -20,8 +39,8 @@
         </el-div>
         <MyUploadImages @upload-image-success="handleUploadImageSuccess"></MyUploadImages>
       </el-form-item>
-      <el-form-item label="上户时间" prop="careAt">
-        <el-date-picker type="datetime" v-model="form.careAt" placeholder="上户时间"></el-date-picker>
+      <el-form-item label="上户时间" prop="actionAt">
+        <el-date-picker type="datetime" v-model="form.actionAt" placeholder="上户时间"></el-date-picker>
       </el-form-item>
       <el-form-item label="备注" prop="d">
         <el-input v-model="form.d"></el-input>
@@ -47,16 +66,31 @@
     },
     data() {
       return {
+        formInit: {
+          sheetId: "",
+          imageUrls:[],
+          selectData: {
+            options: [],
+            value: "",
+          },
+        },
         form: {
           sheetId: "",
           imageUrls:[],
+          selectData: {
+            options: [],
+            value: "",
+          },
         },
+        loading: false,
       }
     },
     create(){
+      
+    },
+    mounted(){
       let sheetId = this.$route.params.sheetId;
       this.form.sheetId = sheetId;
-      
     },
     methods: {
       handleUploadImageSuccess(imagesInfo){
@@ -65,26 +99,45 @@
       deleteImage(index) {
         this.form.imageUrls.splice(index, 1)
       },
+      searchCaregivers(query) {
+        if (query !== '') {
+          this.loading = true;
+          const params = {   }
+          if(query){
+            params.caregiverNameText = query 
+          }
+          this.$axios.get('/api/caregivers',{ params })
+          .then(res => {
+            this.loading = false;
+            this.form.selectData.options = res.data.list.map(i => {return {id: i.id,caregiverName: i.caregiverName }});
+          })
+          .catch(error => {
+            console.log("errorrrr:::: ", error);
+          });
+        } else {
+          this.options = [];
+        }
+      },
+
       submitForm(formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
             const forData = new FormData();
+            forData.append('sheetId', this.form.sheetId)
             forData.append('imageUrls', this.form.imageUrls)
-            forData.append('caregiverName', this.form.caregiverName)
-            forData.append('phone', this.form.phone)
-            forData.append('caregiverAge', this.form.caregiverAge)
-            forData.append('careAt', this.form.careAt)
-            forData.append('serviceCity', this.form.serviceCity)
+            forData.append('actionAt', this.form.actionAt)
+            forData.append('caregiver', this.form.selectData.value)
             forData.append('d', this.form.d)
-            // 发送创建商品请求
+            forData.append('type', 1) // 上户
+            let that = this;
             this.$axios
-            .post("/api/caregivers",forData)
+            .post("/api/actions",forData)
             .then(res => {
               console.log("--------333---- axios res:: ", res)
               this.$message.success('创建成功')
               setTimeout(() => {
-                this.$router.push('/caregivers')
-                this.forData = {};
+                this.$router.push('/orders')
+                that.form = that.formInit;
               }, 500);
               
             })

@@ -44,8 +44,8 @@
       <el-table-column label="操作">
         <template  slot-scope="{ row }">
           <!-- <el-button type="text" size="small" @click="removeItem( row )">修改</el-button> -->
-          <el-button type="warning" size="small" @click="jump_to_up( row.sheetId )">上户</el-button>
-          <el-button type="warning" size="small" @click="jump_to_down( row.sheetId )">下户</el-button>
+          <el-button type="warning" size="small" @click="jump_to_up( row )">上户</el-button>
+          <el-button type="warning" size="small" @click="jump_to_down( row )">下户</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -163,20 +163,21 @@ export default {
       const listss = ["否","是"]
       return listss[num] || num; 
     },
-    jump_to_up(sheetId) {
+    jump_to_up(it) {
+      console.log("----00--- it::", it)
       this.$router.push({
         name: 'OrdersUp',
         params: {
-          sheetId
+          sheetId:it.sheetId
         }
       })
       // 商品编辑逻辑
     },
-    jump_to_down(id) {
+    jump_to_down(sheetId) {
       this.$router.push({
         name: 'OrdersDown',
         params: {
-          id
+          sheetId
         }
       })
       // 商品编辑逻辑
