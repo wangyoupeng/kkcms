@@ -7,7 +7,7 @@
     <template slot="title"><i class="el-icon-menu"></i>工单管理</template>
     <el-menu-item-group>
       <el-menu-item index="1-1" @click="jump_to_orders">工单列表</el-menu-item>
-      <el-menu-item index="1-2" @click="jump_to_categories">上下户</el-menu-item>
+      <el-menu-item index="1-2" @click="jump_to_actions">类型</el-menu-item>
     </el-menu-item-group>
   </el-submenu>
   <el-submenu index="3">
@@ -62,6 +62,11 @@ export default {
     jump_to_users() {
       this.$router.push({
         path: '/users'
+      })
+    },
+    jump_to_actions() {
+      this.$router.push({
+        path: '/actions'
       })
     },
   },

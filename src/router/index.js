@@ -45,14 +45,9 @@ const routes = [
     component: () => import('../views/orders/OrdersList.vue')
   },
   {
-    path: '/orders/up',
-    name: 'OrdersUp',
-    component: () => import('../views/actions/ActionsAddUp.vue')
-  },
-  {
-    path: '/orders/down',
-    name: 'OrdersDown',
-    component: () => import('../views/actions/ActionsAddDown.vue')
+    path: '/actions',
+    name: 'Actions',
+    component: () => import('../views/actions/ActionsList.vue')
   },
   {
     path: '/Users',
