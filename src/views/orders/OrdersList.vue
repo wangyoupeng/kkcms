@@ -44,8 +44,27 @@
       <el-table-column label="操作">
         <template  slot-scope="{ row }">
           <!-- <el-button type="text" size="small" @click="removeItem( row )">修改</el-button> -->
-          <el-button type="warning" size="small" @click="jump_to_up( row )">上户</el-button>
-          <el-button type="warning" size="small" @click="jump_to_down( row )">下户</el-button>
+          <el-button class="button-with-spacing"  type="warning" size="small" v-if="row.status == 0" @click="acceptOrder( row )">接单</el-button>
+          <el-button class="button-with-spacing"  type="danger" size="small" v-if="row.status == 0" @click="showConfirmDialog( row )">拒单</el-button>
+          <el-dialog
+          title="拒绝原因"
+          :visible.sync="dialogVisible"
+          width="30%"
+          @close="clearReason"
+        >
+          <el-form :model="form" label-width="80px">
+            <el-form-item label="拒绝原因" prop="reason">
+              <el-input v-model="form.reason" placeholder="请输入拒绝原因"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="refuseOrder">确认拒绝</el-button>
+              <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+
+          <el-button class="button-with-spacing"  type="warning" size="small" v-if="row.status == 1" @click="jump_to_up( row )">上户</el-button>
+          <el-button class="button-with-spacing"  type="warning" size="small" v-if="row.status == 2" @click="jump_to_down( row )">下户</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,6 +82,10 @@
 </template>
 
 <style>
+  .button-with-spacing {
+    margin-right: 5px; /* 调整按钮之间的间距 */
+    margin-top: 5px; /* 调整按钮之间的间距 */
+  }
   /* 订单列表 */
   .el-table__header tr th {
     background-color: #f5f5f5;
@@ -131,6 +154,12 @@ export default {
       ],
       pageSize: 10, // 分页大小
       currentPage: 1, // 当前页码
+
+      dialogVisible: false,
+      form: {
+        sheetId: '',
+        reason: ''
+      }
     };
   },
   activated() {
@@ -149,6 +178,53 @@ export default {
             console.error("errorrrr:::: ", error);
           });
     },
+    acceptOrder(orderItem){
+        this.$axios.get('/api/orders/accept',{sheetId: orderItem.sheetId} )
+          .then(res => {
+            this.orderList = res.data.list;
+            // alert(res.data.list.length)
+          })
+          .catch(error => {
+            console.error("errorrrr:::: ", error);
+          });
+    },
+    showConfirmDialog(orderItem) {
+      this.dialogVisible = true;
+      this.form.sheetId = orderItem.sheetId;
+    },
+    clearReason() {
+      this.form.reason = '';
+      this.form.sheetId = '';
+      this.dialogVisible = false;
+    },
+    refuseOrder() {
+      // 在这里可以处理拒绝原因
+      console.log('拒绝原因：', this.form.reason);
+      let that = this;
+      this.$axios.get('/api/orders/refuse', this.form )
+        .then(res => {
+          if(res.data.status != 200){
+            this.$message.error(res.data.message || '失败')
+          } else {
+            // 处理完逻辑后关闭对话框
+            this.dialogVisible = false;
+            this.$message.success('创建成功')
+            that.form = { reason: '', shheetId: ''};
+            setTimeout(() => {
+              this.$router.push('/orders')
+            }, 500);
+
+          } 
+          
+        })
+        .catch(error => {
+          console.error("errorrrr:::: ", error);
+        });
+      
+    },
+
+
+
     formatPrice(price) { // 分转元
       return (price / 100).toFixed(2)
     },
@@ -164,7 +240,6 @@ export default {
       return listss[num] || num; 
     },
     jump_to_up(it) {
-      console.log("----00--- it::", it)
       this.$router.push({
         name: 'OrdersUp',
         params: {
@@ -173,14 +248,13 @@ export default {
       })
       // 商品编辑逻辑
     },
-    jump_to_down(sheetId) {
+    jump_to_down(it) {
       this.$router.push({
         name: 'OrdersDown',
         params: {
-          sheetId
+          sheetId: it.sheetId
         }
       })
-      // 商品编辑逻辑
     },
   },
   

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :model="form" ref="form" label-width="100px">
-      <el-form-item label="护工" prop="selectData">
+      <!-- <el-form-item label="护工" prop="selectData">
         <el-select
           v-model="form.selectData.value"
           filterable
@@ -17,7 +17,7 @@
             :value="item.id">
           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       
 
       <el-form-item label="下户图片" prop="imageUrls">
@@ -126,7 +126,6 @@
             forData.append('sheetId', this.form.sheetId)
             forData.append('imageUrls', this.form.imageUrls)
             forData.append('actionAt', this.form.actionAt)
-            forData.append('caregiver', this.form.selectData.value)
             forData.append('d', this.form.d)
             forData.append('type', 2) // 下户
             let that = this;
@@ -134,11 +133,17 @@
             .post("/api/actions", forData)
             .then(res => {
               console.log("--------333---- axios res:: ", res)
-              this.$message.success('创建成功')
-              setTimeout(() => {
-                this.$router.push('/orders')
+              if(res.data.status != 200){
+                this.$message.error(res.data.message || '失败')
+              } else {
+                this.$message.success('创建成功')
                 that.form = that.formInit;
-              }, 500);
+                setTimeout(() => {
+                  this.$router.push('/orders')
+                }, 500);
+
+              }
+              
               
             })
             .catch(err => {

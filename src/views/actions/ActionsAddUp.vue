@@ -135,9 +135,9 @@
             .then(res => {
               console.log("--------333---- axios res:: ", res)
               this.$message.success('创建成功')
+              that.form = that.formInit;
               setTimeout(() => {
                 this.$router.push('/orders')
-                that.form = that.formInit;
               }, 500);
               
             })
