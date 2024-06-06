@@ -5,6 +5,7 @@ module.exports = {
   publicPath: './',
   devServer: {
     open: true,
+    disableHostCheck: true,
     proxy: {
       '/api': {
         target: 'http://localhost:3000/', // 本地后端地址
