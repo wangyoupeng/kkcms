@@ -56,7 +56,7 @@
             this.$message.success('登录成功')
               setTimeout(() => {
                 // this.$router.go(-1) //
-                this.$router.push('/goods')
+                this.$router.push('/orders')
               }, 500);
           } else {
             this.$message.error(res.data.message)

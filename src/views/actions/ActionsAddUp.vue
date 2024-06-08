@@ -112,7 +112,7 @@
             this.form.selectData.options = res.data.list.map(i => {return {id: i.id,caregiverName: i.caregiverName }});
           })
           .catch(error => {
-            console.log("errorrrr:::: ", error);
+            this.$message.error(`护工查询错误 ${error.message}`)
           });
         } else {
           this.options = [];
@@ -132,8 +132,7 @@
             let that = this;
             this.$axios
             .post("/api/actions",forData)
-            .then(res => {
-              console.log("--------333---- axios res:: ", res)
+            .then(() => {
               this.$message.success('创建成功')
               that.form = that.formInit;
               setTimeout(() => {

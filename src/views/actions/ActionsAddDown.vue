@@ -1,23 +1,6 @@
 <template>
   <div>
     <el-form :model="form" ref="form" label-width="100px">
-      <!-- <el-form-item label="护工" prop="selectData">
-        <el-select
-          v-model="form.selectData.value"
-          filterable
-          remote
-          reserve-keyword
-          placeholder="请输入关键词"
-          :remote-method="searchCaregivers"
-          :loading="loading">
-          <el-option
-            v-for="item in form.selectData.options"
-            :key="item.id"
-            :label="item.caregiverName"
-            :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item> -->
       
 
       <el-form-item label="下户图片" prop="imageUrls">
@@ -99,25 +82,6 @@
       deleteImage(index) {
         this.form.imageUrls.splice(index, 1)
       },
-      searchCaregivers(query) {
-        if (query !== '') {
-          this.loading = true;
-          const params = {   }
-          if(query){
-            params.caregiverNameText = query 
-          }
-          this.$axios.get('/api/caregivers',{ params })
-          .then(res => {
-            this.loading = false;
-            this.form.selectData.options = res.data.list.map(i => {return {id: i.id,caregiverName: i.caregiverName }});
-          })
-          .catch(error => {
-            console.log("errorrrr:::: ", error);
-          });
-        } else {
-          this.options = [];
-        }
-      },
 
       submitForm(formName) {
         this.$refs[formName].validate(valid => {
@@ -132,7 +96,6 @@
             this.$axios
             .post("/api/actions", forData)
             .then(res => {
-              console.log("--------333---- axios res:: ", res)
               if(res.data.status != 200){
                 this.$message.error(res.data.message || '失败')
               } else {
