@@ -75,6 +75,16 @@ const routes = [
     name: 'CaregiversEdit',
     component: () => import('../views/caregivers/CaregiversEdit.vue')
   },
+  {
+    path: '/actions/ActionsAddUp',
+    name: 'ActionsAddUp',
+    component: () => import('../views/actions/ActionsAddUp.vue')
+  },
+  {
+    path: '/caregivers/ActionsAddDown',
+    name: 'ActionsAddDown',
+    component: () => import('../views/actions/ActionsAddDown.vue')
+  },
 ]
 
 const router = new Router({

@@ -35,7 +35,7 @@
       </el-table-column>
       <el-table-column prop="status" label="工单状态">
         <template slot-scope="{ row }">
-          {{ row.status || '' }}
+          {{ formatStatus(row.status) }}
         </template>
       </el-table-column>
       <el-table-column prop="at" label="同步时间"></el-table-column>
@@ -168,7 +168,7 @@ export default {
   },
   methods: {
     reloadPage(){
-      const params = { user_id: 10000 }
+      const params = { pageSize: this.pageSize, currentPage: this.currentPage }
         this.$axios.get('/api/orders',params )
           .then(res => {
             this.orderList = res.data.list;
@@ -179,14 +179,21 @@ export default {
           });
     },
     acceptOrder(orderItem){
-        this.$axios.get('/api/orders/accept',{sheetId: orderItem.sheetId} )
-          .then(res => {
-            this.orderList = res.data.list;
-            // alert(res.data.list.length)
-          })
-          .catch(error => {
-            console.error("errorrrr:::: ", error);
-          });
+      this.$axios.post('/api/orders/accept',{sheetId: orderItem.sheetId} )
+        .then(res => {
+          if(res.data.status != 200){
+            this.$message.error(res.data.message || '失败')
+          } else {
+            // 处理完逻辑后关闭对话框
+            setTimeout(() => {
+              this.reloadPage()
+            }, 500);
+
+          } 
+        })
+        .catch(error => {
+          console.error("errorrrr:::: ", error);
+        });
     },
     showConfirmDialog(orderItem) {
       this.dialogVisible = true;
@@ -201,17 +208,17 @@ export default {
       // 在这里可以处理拒绝原因
       console.log('拒绝原因：', this.form.reason);
       let that = this;
-      this.$axios.get('/api/orders/refuse', this.form )
+      this.$axios.post('/api/orders/refuse', this.form )
         .then(res => {
           if(res.data.status != 200){
             this.$message.error(res.data.message || '失败')
           } else {
             // 处理完逻辑后关闭对话框
             this.dialogVisible = false;
-            this.$message.success('创建成功')
+            this.$message.success('成功')
             that.form = { reason: '', shheetId: ''};
             setTimeout(() => {
-              this.$router.push('/orders')
+              this.reloadPage()
             }, 500);
 
           } 
@@ -239,9 +246,14 @@ export default {
       const listss = ["否","是"]
       return listss[num] || num; 
     },
+    formatStatus(status){
+      // 订单状态 0-待接单 1-已接单待上户 2-服务中.. 8-完成 11.拒单 
+      let mapList = ["待接单", "已接单待上户", "服务中","","","","","","完成","","","已拒绝"]
+      return mapList[status] || "-"
+    },
     jump_to_up(it) {
       this.$router.push({
-        name: 'OrdersUp',
+        name: 'ActionsAddUp',
         params: {
           sheetId:it.sheetId
         }
@@ -250,7 +262,7 @@ export default {
     },
     jump_to_down(it) {
       this.$router.push({
-        name: 'OrdersDown',
+        name: 'ActionsAddDown',
         params: {
           sheetId: it.sheetId
         }
