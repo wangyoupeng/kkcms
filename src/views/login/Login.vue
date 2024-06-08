@@ -40,7 +40,6 @@
         this.$router.push('/regist')
       },
 			sub(pwd) {
-				console.log(pwd)
 				// var that = this;
 				const username = this.user
         this.$axios.post('/api/login', {
